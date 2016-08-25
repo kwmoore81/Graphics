@@ -7,15 +7,14 @@
 Geometry makeGeometry(const Vertex * verts, size_t vsize, const unsigned int * tris, size_t tsize)
 {
 	Geometry retval;
-	retval.size = tsize;
-
+	
 	//Define the variables
-	glCreateBuffers(1, &retval.vbo);  //Store vertices
-	glCreateBuffers(1, &retval.ibo);  //Store indices
-	glCreateVertexArrays(1, &retval.vao); //Store attribute information
+	glGenBuffers(1, &retval.vbo);  //Store vertices
+	glGenBuffers(1, &retval.ibo);  //Store indices
+	glGenVertexArrays(1, &retval.vao); //Store attribute information
 	//Scope the variables
 	glBindVertexArray(retval.vao);
-	glBindBuffer(GL_ARRAY_BUFFER, retval.ibo); //scope our vertices
+	glBindBuffer(GL_ARRAY_BUFFER, retval.vbo); //scope our vertices
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, retval.ibo); //triangle is scoped
 	//Initialize the variables
 	new float[4];
@@ -35,6 +34,7 @@ Geometry makeGeometry(const Vertex * verts, size_t vsize, const unsigned int * t
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
+	retval.size = tsize;
 	return retval;
 }
 
