@@ -128,6 +128,7 @@
   <ItemGroup>
     <ClCompile Include="crenderutils.cpp" />
     <ClCompile Include="Gallery.cpp" />
+    <ClCompile Include="procgen.cpp" />
     <ClCompile Include="window.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -135,6 +136,7 @@
     <ClInclude Include="Gallery.h" />
     <ClInclude Include="gldecs.h" />
     <ClInclude Include="globjects.h" />
+    <ClInclude Include="procgen.h" />
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="window.h" />
   </ItemGroup>
