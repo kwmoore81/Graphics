@@ -184,10 +184,10 @@ Geometry loadOBJ(const char *path)
 
 	int vsize = shapes[0].mesh.indices.size();
 
-	Vertex   *verts = new Vertex[attrib.vertices.size() / 3];
-	unsigned * tris = new unsigned[shapes[0].mesh.indices.size()];
+	Vertex   *verts = new Vertex[vsize];
+	unsigned * tris = new unsigned[vsize];
 
-	auto &ind = shapes[0].mesh.indices;
+	//auto &ind = shapes[0].mesh.indices;
 
 	for (int i = 0; i < vsize; ++i)
 	{
@@ -195,18 +195,23 @@ Geometry loadOBJ(const char *path)
 
 		const float *n = &attrib.normals[ind.normal_index * 3]; //+1, +2, 0
 		const float *p = &attrib.vertices[ind.vertex_index * 3]; // +1, +2, 1
-		const float *t = &attrib.texcoords[ind.texcoord_index * 2]; //+1
+		
 
 		verts[i].position = glm::vec4(p[0], p[1], p[2], 1.f);
 		verts[i].normal = glm::vec4(n[0], n[1], n[2], 0.f);
-		verts[i].texCoord = glm::vec2(t[0], t[1]);
-
+		
+		if (ind.texcoord_index >= 0)
+		{
+			const float *t = &attrib.texcoords[ind.texcoord_index * 2]; //+1
+			verts[i].texCoord = glm::vec2(t[0], t[1]);
+		}
 
 		tris[i] = i; //35
 	}
 
-	Geometry retval = makeGeometry(verts, attrib.vertices.size() / 3,
-		tris, shapes[0].mesh.indices.size());
+	Geometry retval = makeGeometry(verts, vsize, tris, vsize);
+	/*Geometry retval = makeGeometry(verts, attrib.vertices.size() / 3,
+		tris, shapes[0].mesh.indices.size());*/
 
 	delete[] verts;
 	delete[] tris;
@@ -305,8 +310,33 @@ void freeTexture(Texture &t)
 
 
 
-void draw(const Shader &s, const Geometry &g, const Texture &t,
-	const float M[16], const float V[16], const float P[16], float time)
+//void draw(const Shader &s, const Geometry &g, const Texture &t,
+//	const float M[16], const float V[16], const float P[16], float time)
+//{
+//	glEnable(GL_CULL_FACE);
+//	glEnable(GL_DEPTH_TEST);
+//
+//	glUseProgram(s.handle);
+//	glBindVertexArray(g.vao);
+//
+//
+//	glUniformMatrix4fv(0, 1, GL_FALSE, P);
+//	glUniformMatrix4fv(1, 1, GL_FALSE, V);
+//	glUniformMatrix4fv(2, 1, GL_FALSE, M);
+//
+//	glUniform1f(3, time);
+//
+//	// Minimum guaranteed is 8.
+//	glActiveTexture(GL_TEXTURE0);
+//	glBindTexture(GL_TEXTURE_2D, t.handle);
+//	glUniform1i(4, 0);
+//
+//	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
+//}
+
+void drawPhong(const Shader &s, const Geometry &g,
+	const float M[16], const float V[16], const float P[16],
+	const Texture *T, unsigned t_count)
 {
 	glEnable(GL_CULL_FACE);
 	glEnable(GL_DEPTH_TEST);
@@ -314,17 +344,15 @@ void draw(const Shader &s, const Geometry &g, const Texture &t,
 	glUseProgram(s.handle);
 	glBindVertexArray(g.vao);
 
-
 	glUniformMatrix4fv(0, 1, GL_FALSE, P);
 	glUniformMatrix4fv(1, 1, GL_FALSE, V);
 	glUniformMatrix4fv(2, 1, GL_FALSE, M);
 
-	glUniform1f(3, time);
-
-	// Minimum guaranteed is 8.
-	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_2D, t.handle);
-	glUniform1i(4, 0);
+	// Light Direction
+	// Light Color
+	// Specular Factor
+	// Normal Map
+	// Albedo Map (color)
 
 	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
 }

@@ -20,6 +20,6 @@ struct Vertex
 		POSITION = 0,
 		COLOR = 16,
 		NORMAL = 32,
-		TEXCOORD = 32,
+		TEXCOORD = 48,
 	};
 };
