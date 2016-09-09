@@ -6,7 +6,7 @@ struct Vertex
 	glm::vec4 position;
 	glm::vec4 color;
 	glm::vec4 normal;
-	glm::vec2 texCoord;
+	glm::vec2 texcoord;
 
 	//float position[4];
 	//float color[4];

@@ -6,8 +6,11 @@ in vec4 vNormal;
 in vec4 vPosition;
 in vec2 UV;
 
+layout(location = 0)uniform mat4 proj;
 layout(location = 1)uniform mat4 view;
 layout(location = 3)uniform sampler2D diffuseMap;
+layout(location = 4)uniform sampler2D specularMap;
+layout(location = 5)uniform sampler2D normalMap;
 
 
 void main()
@@ -16,13 +19,22 @@ void main()
 	vec4 camPos = inverse(view)[3];
 	float specPower = 8.f;
 
-	vec4 la = vec4(0, 0.4f,.4f,1.f),
+	vec4 la = vec4(0.2f, 0.2f,0.2f,1.f),
 	     ld = vec4(1,1,1,1),
              ls = vec4(1,1,1,1); 
-	vec4 sa = vec4(.4f,.4f,.4f,1.f),
-	     sd = texture(diffuseMap, UV),
-             ss = vec4(1,0,0,1);
 
+	vec4 sa = vec4(.1f,.1f,.1f,1.f),
+	     sd = texture(diffuseMap,  UV),
+             ss = texture(specularMap, UV);
+
+	
+	vec4 PP = proj * view * vPosition;		
+
+	if(PP.x < 0)
+	{
+		ss = vec4(1,1,1,1);
+		sd = texture(normalMap, UV);
+	}
 
 	vec4 R = reflect(lDir, vNormal); 	// light reflection
 	vec4 E = normalize(camPos - vPosition); // eye direction

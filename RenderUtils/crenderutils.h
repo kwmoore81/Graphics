@@ -31,5 +31,8 @@ void freeTexture(Texture &);
 void draw(const Shader &, const Geometry &, const Texture &, const float M[16], const float V[16], const float P[16], float time);
 
 void drawPhong(const Shader &s, const Geometry &g,
+	const float M[16], const float V[16], const float P[16]);
+
+void drawPhong(const Shader &s, const Geometry &g,
 	const float M[16], const float V[16], const float P[16],
 	const Texture *T, unsigned t_count);

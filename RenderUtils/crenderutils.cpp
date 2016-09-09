@@ -6,32 +6,32 @@
 #include "GLM\gtc\noise.hpp"
 
 #define STB_IMAGE_IMPLEMENTATION
-//#include "STB\stb_image.h"
+#include "STB\stb_image.h"
 
-//Texture loadTexture(const char *path)
-//{
-//	int w, h, f;
-//	unsigned char *p;
-//
-//	Texture retval = { 0,0,0,0 };
-//
-//	stbi_set_flip_vertically_on_load(true); // DirectX or OpenGL
-//	p = stbi_load(path, &w, &h, &f, STBI_default);
-//
-//	if (!p) return retval;
-//
-//	switch (f)
-//	{
-//	case STBI_grey: f = GL_RED;  break;
-//	case STBI_grey_alpha: f = GL_RG;   break;
-//	case STBI_rgb: f = GL_RGB;  break;
-//	case STBI_rgb_alpha: f = GL_RGBA; break;
-//	}
-//
-//	retval = makeTexture(w, h, f, p);
-//	stbi_image_free(p);
-//	return retval;
-//}
+Texture loadTexture(const char *path)
+{
+	int w, h, f;
+	unsigned char *p;
+
+	Texture retval = { 0,0,0,0 };
+
+	stbi_set_flip_vertically_on_load(true); // DirectX or OpenGL
+	p = stbi_load(path, &w, &h, &f, STBI_default);
+
+	if (!p) return retval;
+
+	switch (f)
+	{
+	case STBI_grey: f = GL_RED;  break;
+	case STBI_grey_alpha: f = GL_RG;   break;
+	case STBI_rgb: f = GL_RGB;  break;
+	case STBI_rgb_alpha: f = GL_RGBA; break;
+	}
+
+	retval = makeTexture(w, h, f, p);
+	stbi_image_free(p);
+	return retval;
+}
 
 
 Geometry makeGeometry(const Vertex       * verts, size_t vsize,
@@ -203,7 +203,7 @@ Geometry loadOBJ(const char *path)
 		if (ind.texcoord_index >= 0)
 		{
 			const float *t = &attrib.texcoords[ind.texcoord_index * 2]; //+1
-			verts[i].texCoord = glm::vec2(t[0], t[1]);
+			verts[i].texcoord = glm::vec2(t[0], t[1]);
 		}
 
 		tris[i] = i; //35
@@ -310,29 +310,46 @@ void freeTexture(Texture &t)
 
 
 
-//void draw(const Shader &s, const Geometry &g, const Texture &t,
-//	const float M[16], const float V[16], const float P[16], float time)
-//{
-//	glEnable(GL_CULL_FACE);
-//	glEnable(GL_DEPTH_TEST);
-//
-//	glUseProgram(s.handle);
-//	glBindVertexArray(g.vao);
-//
-//
-//	glUniformMatrix4fv(0, 1, GL_FALSE, P);
-//	glUniformMatrix4fv(1, 1, GL_FALSE, V);
-//	glUniformMatrix4fv(2, 1, GL_FALSE, M);
-//
-//	glUniform1f(3, time);
-//
-//	// Minimum guaranteed is 8.
-//	glActiveTexture(GL_TEXTURE0);
-//	glBindTexture(GL_TEXTURE_2D, t.handle);
-//	glUniform1i(4, 0);
-//
-//	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
-//}
+void draw(const Shader &s, const Geometry &g, const Texture &t,
+	const float M[16], const float V[16], const float P[16], float time)
+{
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+
+	glUseProgram(s.handle);
+	glBindVertexArray(g.vao);
+
+
+	glUniformMatrix4fv(0, 1, GL_FALSE, P);
+	glUniformMatrix4fv(1, 1, GL_FALSE, V);
+	glUniformMatrix4fv(2, 1, GL_FALSE, M);
+
+	glUniform1f(3, time);
+
+	// Minimum guaranteed is 8.
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, t.handle);
+	glUniform1i(4, 0);
+
+	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
+}
+
+void drawPhong(const Shader &s, const Geometry &g,
+	const float M[16], const float V[16], const float P[16])
+{
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+
+	glUseProgram(s.handle);
+	glBindVertexArray(g.vao);
+
+	glUniformMatrix4fv(0, 1, GL_FALSE, P);
+	glUniformMatrix4fv(1, 1, GL_FALSE, V);
+	glUniformMatrix4fv(2, 1, GL_FALSE, M);
+
+
+	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
+}
 
 void drawPhong(const Shader &s, const Geometry &g,
 	const float M[16], const float V[16], const float P[16],
@@ -353,6 +370,14 @@ void drawPhong(const Shader &s, const Geometry &g,
 	// Specular Factor
 	// Normal Map
 	// Albedo Map (color)
+	for (int i = 0; i < t_count; ++i)
+	{
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, T[i].handle);
+		glUniform1i(3 + i, i);
+		
+	}
+
 
 	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
 }

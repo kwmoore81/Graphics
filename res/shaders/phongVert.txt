@@ -2,8 +2,8 @@
 
 layout(location = 0) in vec4 position;
 layout(location = 2) in vec4 normal;
-layout(location = 3) in vec2 texCoord;
-//UVs and Normals later
+layout(location = 3) in vec2 texcoord;
+// UVs and Normals later.
 
 
 layout(location = 0)uniform mat4 proj;
@@ -16,10 +16,8 @@ out vec2 UV;
 
 void main()
 {
-	vNormal = model*normal;
-	
-	UV = texCoord;
-
+	vNormal = model * normal;
+	UV = texcoord;	
 	vPosition = model * position;
 
 	gl_Position = proj * view * model * position;
