@@ -146,6 +146,12 @@
     <ClInclude Include="Vertex.h" />
     <ClInclude Include="window.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\res\shaders\phongFrag.glsl" />
+    <None Include="..\res\shaders\phongVert.glsl" />
+    <None Include="..\res\shaders\postFrag.glsl" />
+    <None Include="..\res\shaders\postVert.glsl" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -22,3 +22,11 @@ struct Texture
 	unsigned width, height, format;
 
 };
+
+struct Framebuffer
+{
+	unsigned handle;
+	unsigned width, height, nColors;
+	Texture colors[8]; 
+	Texture depth;
+};

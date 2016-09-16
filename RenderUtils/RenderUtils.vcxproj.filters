@@ -69,4 +69,18 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\res\shaders\phongFrag.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaders\phongVert.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaders\postFrag.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaders\postVert.glsl">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

@@ -179,39 +179,31 @@ Geometry loadOBJ(const char *path)
 	std::vector<tinyobj::shape_t> shapes;
 	std::vector<tinyobj::material_t> materials;
 	std::string err;
-
 	bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &err, path);
-
 	int vsize = shapes[0].mesh.indices.size();
-
 	Vertex   *verts = new Vertex[vsize];
 	unsigned * tris = new unsigned[vsize];
-
-	//auto &ind = shapes[0].mesh.indices;
 
 	for (int i = 0; i < vsize; ++i)
 	{
 		auto ind = shapes[0].mesh.indices[i];
 
-		const float *n = &attrib.normals[ind.normal_index * 3]; //+1, +2, 0
+		const float *n = &attrib.normals[ind.normal_index * 3]; // +1, +2, 0
 		const float *p = &attrib.vertices[ind.vertex_index * 3]; // +1, +2, 1
-		
 
 		verts[i].position = glm::vec4(p[0], p[1], p[2], 1.f);
 		verts[i].normal = glm::vec4(n[0], n[1], n[2], 0.f);
-		
+
 		if (ind.texcoord_index >= 0)
 		{
-			const float *t = &attrib.texcoords[ind.texcoord_index * 2]; //+1
+			const float *t = &attrib.texcoords[ind.texcoord_index * 2]; // +1
 			verts[i].texcoord = glm::vec2(t[0], t[1]);
 		}
 
-		tris[i] = i; //35
+		tris[i] = i;
 	}
 
 	Geometry retval = makeGeometry(verts, vsize, tris, vsize);
-	/*Geometry retval = makeGeometry(verts, attrib.vertices.size() / 3,
-		tris, shapes[0].mesh.indices.size());*/
 
 	delete[] verts;
 	delete[] tris;
@@ -273,6 +265,7 @@ Texture makeTexture(unsigned width, unsigned height, unsigned format, const unsi
 	glGenTextures(1, &retval.handle);				// Declaration
 	glBindTexture(GL_TEXTURE_2D, retval.handle);    // Scoping
 
+													// GL_RED, GL_RG, GL_RGB, GL_RGBA
 	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, pixels);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -334,6 +327,8 @@ void draw(const Shader &s, const Geometry &g, const Texture &t,
 	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
 }
 
+
+
 void drawPhong(const Shader &s, const Geometry &g,
 	const float M[16], const float V[16], const float P[16])
 {
@@ -365,17 +360,83 @@ void drawPhong(const Shader &s, const Geometry &g,
 	glUniformMatrix4fv(1, 1, GL_FALSE, V);
 	glUniformMatrix4fv(2, 1, GL_FALSE, M);
 
-	// Light Direction
-	// Light Color
-	// Specular Factor
-	// Normal Map
-	// Albedo Map (color)
+	int i = 0;
+	for (; i < t_count; ++i)
+	{
+		glActiveTexture(GL_TEXTURE0 + i);
+		glBindTexture(GL_TEXTURE_2D, T[i].handle);
+		glUniform1i(3 + i, 0 + i);
+	}
+
+	glDrawElements(GL_TRIANGLES, g.size, GL_UNSIGNED_INT, 0);
+}
+
+Framebuffer makeFramebuffer(unsigned width, unsigned height, unsigned nColors)
+{
+	Framebuffer retval = { 0,width,height,nColors};
+
+	glGenFramebuffers(1, &retval.handle);
+	glBindFramebuffer(GL_FRAMEBUFFER, retval.handle);
+
+	retval.depth = makeTexture(width, height, GL_DEPTH_COMPONENT, 0);
+	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, retval.depth.handle, 0);
+
+
+	const GLenum attachments[8] =
+	{ GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2,
+		GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4, GL_COLOR_ATTACHMENT5,
+		GL_COLOR_ATTACHMENT6, GL_COLOR_ATTACHMENT7 };
+
+	for (int i = 0; i < nColors && i < 8; ++i)
+	{
+		retval.colors[i] = makeTexture(width, height, GL_RGBA, 0);
+		glFramebufferTexture(GL_FRAMEBUFFER, attachments[i],
+			retval.colors[i].handle, 0);
+	}
+	glDrawBuffers(nColors, attachments);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	return retval;
+}
+
+void clearFramebuffer(const Framebuffer &f)
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, f.handle);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+void freeFramebuffer(Framebuffer &fb)
+{
+	for (unsigned i = 0; i < fb.nColors; ++i)
+		freeTexture(fb.colors[i]);
+
+	glDeleteFramebuffers(1, &fb.handle);
+	fb = { 0,0,0,0 };
+}
+
+
+
+void drawFB(const Shader &s, const Geometry &g, const Framebuffer &f,
+	const float M[16], const float V[16], const float P[16],
+	const Texture *T, unsigned t_count)
+{
+	glEnable(GL_CULL_FACE);
+	glEnable(GL_DEPTH_TEST);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, f.handle);
+	glUseProgram(s.handle);
+	glBindVertexArray(g.vao);
+
+	glViewport(0, 0, f.width, f.height);
+
+	glUniformMatrix4fv(0, 1, GL_FALSE, P);
+	glUniformMatrix4fv(1, 1, GL_FALSE, V);
+	glUniformMatrix4fv(2, 1, GL_FALSE, M);
+
 	for (int i = 0; i < t_count; ++i)
 	{
 		glActiveTexture(GL_TEXTURE0 + i);
 		glBindTexture(GL_TEXTURE_2D, T[i].handle);
-		glUniform1i(3 + i, i);
-		
+		glUniform1i(3 + i, 0 + i);
 	}
 
 
