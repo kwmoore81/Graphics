@@ -8,13 +8,6 @@ struct Vertex
 	glm::vec4 normal;
 	glm::vec2 texcoord;
 
-	//float position[4];
-	//float color[4];
-	//float normal[4];
-	//float tangent[4];
-	//float binormal[4];
-	//float texCoord[2];
-
 	enum
 	{
 		POSITION = 0,
@@ -23,3 +16,10 @@ struct Vertex
 		TEXCOORD = 48,
 	};
 };
+
+const Vertex  quad_verts[4] = { { { -1,-1,0, 1 },{1,1,1,1},{0,0,1,0},{ 0,0 } },
+                           { {  1,-1, 0,1 },{1,1,0,1},{0,0,1,0},{ 1,0 } },
+                           { {  1, 1, 0,1 },{1,0,1,1},{0,0,1,0},{ 1,1 } },
+                           { { -1, 1, 0,1 },{0,1,1,1},{0,0,1,0},{ 0,1 } } };
+
+const unsigned quad_tris[] = { 0,1,2, 2,3,0 };

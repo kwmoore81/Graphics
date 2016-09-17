@@ -36,6 +36,15 @@
     <ClCompile Include="Timer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="glmake.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="glload.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gldraw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="crenderutils.h">
@@ -68,6 +77,15 @@
     <ClInclude Include="Timer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="glmake.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="glload.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gldraw.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\res\shaders\phongFrag.glsl">
@@ -82,5 +100,16 @@
     <None Include="..\res\shaders\postVert.glsl">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\res\shaders\simple.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaders\simple.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\res\textures\pants.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
   </ItemGroup>
 </Project>

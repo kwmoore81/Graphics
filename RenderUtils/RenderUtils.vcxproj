@@ -129,6 +129,9 @@
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="crenderutils.cpp" />
     <ClCompile Include="Gallery.cpp" />
+    <ClCompile Include="gldraw.cpp" />
+    <ClCompile Include="glload.cpp" />
+    <ClCompile Include="glmake.cpp" />
     <ClCompile Include="Input.cpp" />
     <ClCompile Include="procgen.cpp" />
     <ClCompile Include="Timer.cpp" />
@@ -139,6 +142,9 @@
     <ClInclude Include="crenderutils.h" />
     <ClInclude Include="Gallery.h" />
     <ClInclude Include="gldecs.h" />
+    <ClInclude Include="gldraw.h" />
+    <ClInclude Include="glload.h" />
+    <ClInclude Include="glmake.h" />
     <ClInclude Include="globjects.h" />
     <ClInclude Include="Input.h" />
     <ClInclude Include="procgen.h" />
@@ -151,6 +157,11 @@
     <None Include="..\res\shaders\phongVert.glsl" />
     <None Include="..\res\shaders\postFrag.glsl" />
     <None Include="..\res\shaders\postVert.glsl" />
+    <None Include="..\res\shaders\simple.frag" />
+    <None Include="..\res\shaders\simple.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\res\textures\pants.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

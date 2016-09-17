@@ -1,7 +1,6 @@
 #define GLEW_STATIC
+#include "gldecs.h"
 
-#include "GLEW\glew.h"
-#include "GLFW\glfw3.h"
 #include "window.h"
 #include <cstring>
 #include <cstdio>

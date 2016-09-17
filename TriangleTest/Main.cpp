@@ -1,40 +1,34 @@
 #include "crenderutils.h"
-#include "window.h"
-//#include "Gallery.h"
+
 #include "GLM\ext.hpp"
-#include "GLM\glm.hpp"
 
-int main()
+void main()
 {
-	Window window;
-	//Gallery gallery;
+	Window context;
+	context.init(1280, 720);
 
-	window.init(1280, 720);
-	//gallery.init();
+	Framebuffer screen = { 0,1280,720 };
+	Geometry quad = makeGeometry(quad_verts, 4, quad_tris, 6);
+
+	Shader simple = loadShader("../res/shaders/simple.vert", "../res/shaders/simple.frag");
+
+	Geometry spear = loadOBJ("../res/models/soulspear.obj");
 	
-	glm::mat4 view = glm::lookAt(glm::vec3(5.f, 5.f, 5.f), glm::vec3(0.f, 0.f, 0.f), glm::vec3(0.f, 1.f, 0.f));
-	glm::mat4 proj = glm::perspective(45.f, 16/9.f, 1.f, 100.f);
-	glm::mat4 model;
+	Texture spear_normal = loadTexture("../res/textures/soulspear_normal.tga");
+	Texture spear_diffuse = loadTexture("../res/textures/soulspear_diffuse.tga");
+	Texture spear_specular = loadTexture("../res/textures/soulspear_specular.tga");
 
-	Geometry geo = loadOBJ("../res/models/cube.obj");
-	Shader shader = loadShader("../shaders/phongVert.txt", "../res/shaders/phongFrag.txt");
+	glm::mat4 model, view, proj;
 
+	model = glm::translate(glm::vec3(1, -1.5f, 0));
+	view = glm::lookAt(glm::vec3(1, 0, 3), glm::vec3(1, 0, 0), glm::vec3(0, 1, 0));
+	proj = glm::perspective(45.f, 1280.f / 720, 1.f, 100.f);
 
-	/*gallery.loadShader("SIMPLE", "../res/shaders/simpleVert.txt", "../res/shaders/simpleFrag.txt");
-	gallery.loadShader("SIMPLE", "../res/shaders/simpleVert.txt", "../res/shaders/simpleFrag.txt");
-	gallery.loadObjectOBJ("SPHERE", "../res/models/sphere.obj");*/
-
-	//float time = 0;
-	
-	while (window.step())
+	while (context.step())
 	{
-		//drawPhong(shader, geo, glm::value_ptr(model), glm::value_ptr(view), glm::value_ptr(proj));
-		/*time += 0.016667f;
-		draw(gallery.getShader("SIMPLE"), gallery.getObject("SPHERE"), time);*/
+		tdraw(simple, spear, screen, model, view, proj,
+			spear_diffuse, spear_normal, spear_specular);
 	}
 
-	//gallery.term();
-	window.term();
-
-	return 0;
+	context.term();
 }
