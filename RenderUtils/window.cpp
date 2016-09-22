@@ -15,7 +15,7 @@ void APIENTRY GL_errorCallback(GLenum source, GLenum type, GLuint id, GLenum sev
 
 	if (severity == GL_DEBUG_SEVERITY_HIGH)
 	{
-		abort();
+		//system("pause");
 	}
 }
 
@@ -35,7 +35,7 @@ bool Window::init(int a_width, int a_height, char * a_title)
 
 	glewExperimental = true;
 	glewInit();
-	glClearColor(0.235f,0.702f,0.443f,1.0f);
+	glClearColor(0.0f,0.0f,0.0f,0.0f);
 
 #ifdef _DEBUG
 

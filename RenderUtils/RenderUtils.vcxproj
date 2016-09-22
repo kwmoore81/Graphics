@@ -155,12 +155,16 @@
   <ItemGroup>
     <None Include="..\res\shaders\gpass.frag" />
     <None Include="..\res\shaders\gpass.vert" />
+    <None Include="..\res\shaders\lpass.frag" />
+    <None Include="..\res\shaders\lpass.vert" />
     <None Include="..\res\shaders\phongFrag.glsl" />
     <None Include="..\res\shaders\phongVert.glsl" />
     <None Include="..\res\shaders\post.frag" />
     <None Include="..\res\shaders\post.vert" />
     <None Include="..\res\shaders\postFrag.glsl" />
     <None Include="..\res\shaders\postVert.glsl" />
+    <None Include="..\res\shaders\quad.frag" />
+    <None Include="..\res\shaders\quad.vert" />
     <None Include="..\res\shaders\simple.frag" />
     <None Include="..\res\shaders\simple.vert" />
   </ItemGroup>

@@ -118,6 +118,18 @@
     <None Include="..\res\shaders\post.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\res\shaders\lpass.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaders\lpass.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaders\quad.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaders\quad.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\res\textures\pants.jpg">

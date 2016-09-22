@@ -13,6 +13,10 @@ struct Geometry
 struct Shader
 {
 	unsigned handle;
+
+	bool depthTest;
+	bool additiveBlend;
+	bool faceCulling;
 };
 
 
@@ -28,6 +32,7 @@ struct Framebuffer
 {
 	unsigned handle;
 	unsigned width, height, nColors;
-	Texture colors[8]; 
+	
 	Texture depth;
+	Texture colors[8];
 };

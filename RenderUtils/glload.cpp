@@ -1,4 +1,4 @@
-#include"gldecs.h"
+#include "gldecs.h"
 #include "glmake.h"
 #include "globjects.h"
 #include "Vertex.h"
@@ -6,7 +6,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "STB\stb_image.h"
 
-#define TINYOBJLOADER_IMPLEMENTATION
+#define TINYOBJLOADER_IMPLEMENTATION // define this in only *one* .cc
 #include "OBJ\tiny_obj_loader.h"
 
 #include <fstream>
@@ -20,6 +20,16 @@ std::string cppStyleFileToString(const char *path)
 	std::string file_contents{ std::istreambuf_iterator<char>(infile),
 		std::istreambuf_iterator<char>() };
 	return file_contents;
+}
+
+Shader loadShader(const char *vpath, const char *fpath,
+	bool depth, bool add, bool face)
+{
+	std::string vs = cppStyleFileToString(vpath);
+	std::string fs = cppStyleFileToString(fpath);
+
+	return makeShader(vs.c_str(), fs.c_str(),
+		depth, add, face);
 }
 
 Texture loadTexture(const char *path)
@@ -36,29 +46,15 @@ Texture loadTexture(const char *path)
 
 	if (!p) return retval;
 
-	switch (f)
-	{
-	case STBI_grey: f = GL_RED;  break;
-	case STBI_grey_alpha: f = GL_RG;   break;
-	case STBI_rgb: f = GL_RGB;  break;
-	case STBI_rgb_alpha: f = GL_RGBA; break;
-	}
-
 	retval = makeTexture(w, h, f, p);
 	stbi_image_free(p);
 	return retval;
 }
 
-Shader loadShader(const char *vpath, const char *fpath)
-{
-	std::string vs = cppStyleFileToString(vpath);
-	std::string fs = cppStyleFileToString(fpath);
-
-	return makeShader(vs.c_str(), fs.c_str());
-}
 
 Geometry loadOBJ(const char *path)
 {
+	glog("TODO", "Eliminate redundant vertices.");
 	tinyobj::attrib_t attrib;
 	std::vector<tinyobj::shape_t> shapes;
 	std::vector<tinyobj::material_t> materials;

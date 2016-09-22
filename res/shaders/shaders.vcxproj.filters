@@ -14,4 +14,36 @@
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="gpass.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="gpass.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="lpass.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="lpass.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="post.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="post.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="quad.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="quad.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="simple.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="simple.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
 </Project>

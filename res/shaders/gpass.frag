@@ -23,7 +23,7 @@ void main()
 	albedo   = texture(diffuseMap, vUV);
 	normal   = vec4(N,0);
 	specular = texture(specularMap, vUV);
-	position = vPosition;
+	position = vec4(vPosition,1);
 }
 
 

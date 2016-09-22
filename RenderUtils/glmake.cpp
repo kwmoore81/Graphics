@@ -1,10 +1,11 @@
-#include "glmake.h"
 #include "gldecs.h"
-#include "Vertex.h"
+#include "glmake.h"
 #include "globjects.h"
+#include "Vertex.h"
 
-Geometry makeGeometry(const struct Vertex *verts, size_t vsize,
-	const unsigned int * tris, size_t tsize)
+
+Geometry makeGeometry(const Vertex *verts, size_t vsize,
+	const unsigned int *tris, size_t tsize)
 {
 	Geometry retval;
 
@@ -50,15 +51,16 @@ void freeGeometry(Geometry &geo)
 	geo = { 0,0,0,0 };
 }
 
-Shader makeShader(const char * vsource, const char * fsource)
+
+Shader makeShader(const char * vsource, const char * fsource,
+	bool depth, bool add, bool face)
 {
-	glog("TODO", "Find a way to implenet state management.");
-	
-	Shader retval;
+	Shader retval = { 0, depth, add, face };
 	// create our variables
 	retval.handle = glCreateProgram();
 	unsigned vs = glCreateShader(GL_VERTEX_SHADER);
 	unsigned fs = glCreateShader(GL_FRAGMENT_SHADER);
+
 	// initialize our variables
 	glShaderSource(vs, 1, &vsource, 0);
 	glShaderSource(fs, 1, &fsource, 0);
@@ -68,6 +70,7 @@ Shader makeShader(const char * vsource, const char * fsource)
 	// link the shaders into a single program
 	glAttachShader(retval.handle, vs);
 	glAttachShader(retval.handle, fs);
+
 	glog_glLinkProgram(retval.handle);
 	// no longer need these! Their functionality has been eaten by the program.
 	glDeleteShader(vs);
@@ -83,9 +86,20 @@ void freeShader(Shader &shader)
 }
 
 
-Texture makeTexture(unsigned width, unsigned height, unsigned format, const unsigned char *pixels)
+Texture makeTexture(unsigned width, unsigned height, unsigned channels, const unsigned char *pixels)
 {
-	Texture retval = { 0, width, height, format };
+	GLenum format = GL_RGBA;
+	switch (channels)
+	{
+	case 0: format = GL_DEPTH_COMPONENT; break;
+	case 1: format = GL_RED;  break;
+	case 2: format = GL_RG;   break;
+	case 3: format = GL_RGB;  break;
+	case 4: format = GL_RGBA; break;
+	default: glog("ERROR", "Channels must be 1-4");
+	}
+
+	Texture retval = { 0, width, height, channels };
 
 	glGenTextures(1, &retval.handle);				// Declaration
 	glBindTexture(GL_TEXTURE_2D, retval.handle);    // Scoping
@@ -103,6 +117,8 @@ Texture makeTexture(unsigned width, unsigned height, unsigned format, const unsi
 
 Texture makeTextureF(unsigned square, const float * pixels)
 {
+	glog("TODO", "DEPRECATE ME.");
+
 	Texture retval = { 0, square, square, GL_RED }; // GL_RED, GL_RG, GL_RGB, GL_RGBA
 
 	glGenTextures(1, &retval.handle);				// Declaration
@@ -126,17 +142,21 @@ void freeTexture(Texture &t)
 	t = { 0,0,0,0 };
 }
 
+
 Framebuffer makeFramebuffer(unsigned width, unsigned height, unsigned nColors)
 {
+	glog("TODO", "Find a way to implement state management.");
+	glog("TODO", "Better implementation of the depth buffer.");
+	glog("TODO", "Provide more options? enable/disable stencil/depth buffers.");
+
 	Framebuffer retval = { 0,width,height,nColors };
 
 	glGenFramebuffers(1, &retval.handle);
 	glBindFramebuffer(GL_FRAMEBUFFER, retval.handle);
-
-	retval.depth = makeTexture(width, height, GL_DEPTH_COMPONENT, 0);
+	////////////////////////////////////////////////////////////////////////////////////
+	retval.depth = makeTexture(width, height, 0, 0);
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, retval.depth.handle, 0);
-
-
+	////////////////////////////////////////////////////////////////////////////////////
 	const GLenum attachments[8] =
 	{ GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2,
 		GL_COLOR_ATTACHMENT3, GL_COLOR_ATTACHMENT4, GL_COLOR_ATTACHMENT5,
@@ -144,7 +164,7 @@ Framebuffer makeFramebuffer(unsigned width, unsigned height, unsigned nColors)
 
 	for (int i = 0; i < nColors && i < 8; ++i)
 	{
-		retval.colors[i] = makeTexture(width, height, GL_RGBA, 0);
+		retval.colors[i] = makeTexture(width, height, 4, 0);
 		glFramebufferTexture(GL_FRAMEBUFFER, attachments[i],
 			retval.colors[i].handle, 0);
 	}
@@ -162,4 +182,3 @@ void freeFramebuffer(Framebuffer &fb)
 	glDeleteFramebuffers(1, &fb.handle);
 	fb = { 0,0,0,0 };
 }
-
