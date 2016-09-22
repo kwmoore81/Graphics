@@ -19,19 +19,19 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{245F49BD-51FA-4EAC-B714-6A0C91DDD2CD}</ProjectGuid>
-    <RootNamespace>RenderUtils</RootNamespace>
+    <ProjectGuid>{AE0F120C-BE51-4CC0-AA6F-9F1A46392E7B}</ProjectGuid>
+    <RootNamespace>shader</RootNamespace>
     <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -74,15 +74,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)dep\include\</AdditionalIncludeDirectories>
     </ClCompile>
-    <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)dep\lib\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32s.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Lib>
-    <ProjectReference>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
-    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -98,19 +90,11 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)dep\include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
-    <Lib>
-      <AdditionalLibraryDirectories>$(SolutionDir)dep\lib\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>glew32s.lib;glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-    </Lib>
-    <ProjectReference>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
-    </ProjectReference>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -126,46 +110,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Camera.cpp" />
-    <ClCompile Include="crenderutils.cpp" />
-    <ClCompile Include="Gallery.cpp" />
-    <ClCompile Include="gldraw.cpp" />
-    <ClCompile Include="glload.cpp" />
-    <ClCompile Include="glmake.cpp" />
-    <ClCompile Include="Input.cpp" />
-    <ClCompile Include="procgen.cpp" />
-    <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="window.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Camera.h" />
-    <ClInclude Include="crenderutils.h" />
-    <ClInclude Include="Gallery.h" />
-    <ClInclude Include="gldecs.h" />
-    <ClInclude Include="gldraw.h" />
-    <ClInclude Include="glload.h" />
-    <ClInclude Include="glmake.h" />
-    <ClInclude Include="globjects.h" />
-    <ClInclude Include="Input.h" />
-    <ClInclude Include="procgen.h" />
-    <ClInclude Include="Timer.h" />
-    <ClInclude Include="Vertex.h" />
-    <ClInclude Include="window.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\res\shaders\gpass.frag" />
-    <None Include="..\res\shaders\gpass.vert" />
-    <None Include="..\res\shaders\phongFrag.glsl" />
-    <None Include="..\res\shaders\phongVert.glsl" />
-    <None Include="..\res\shaders\post.frag" />
-    <None Include="..\res\shaders\post.vert" />
-    <None Include="..\res\shaders\postFrag.glsl" />
-    <None Include="..\res\shaders\postVert.glsl" />
-    <None Include="..\res\shaders\simple.frag" />
-    <None Include="..\res\shaders\simple.vert" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\res\textures\pants.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

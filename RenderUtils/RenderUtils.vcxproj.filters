@@ -106,6 +106,18 @@
     <None Include="..\res\shaders\simple.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="..\res\shaders\gpass.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaders\gpass.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaders\post.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\res\shaders\post.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="..\res\textures\pants.jpg">

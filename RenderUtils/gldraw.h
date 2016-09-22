@@ -12,10 +12,11 @@ namespace tdraw_internal
 
 	size_t tdraw_format(size_t idx, size_t tex, const glm::mat4 &val);
 	size_t tdraw_format(size_t idx, size_t tex, const glm::vec3 &val);
-
-	size_t tdraw_format(size_t idx, size_t tex, int val);
+	size_t tdraw_format(size_t idx, size_t tex, int   val);
 	size_t tdraw_format(size_t idx, size_t tex, float val);
 	size_t tdraw_format(size_t idx, size_t tex, const Texture &val);
+
+
 
 	template<typename T, typename ...U>
 	void tdraw_unpack(size_t idx, size_t tex, T val, U &&...uniforms)
@@ -36,7 +37,6 @@ void tdraw(const Shader &s, const Geometry &g, const Framebuffer &r, U ... unifo
 {
 	tdraw_internal::tdraw_begin(s, g, r);
 
-	// uniform location, texture slot location
 	tdraw_internal::tdraw_unpack(0, 0, uniforms...);
 
 	tdraw_internal::tdraw_close(s, g, r);
