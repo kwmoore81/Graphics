@@ -45,5 +45,17 @@
     <None Include="simple.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="spass.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="spass.vert">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="lspass.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="lspass.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -13,13 +13,15 @@ void freeShader(Shader &);
 
 
 struct Texture makeTexture(unsigned width, unsigned height, unsigned channels,
-	const unsigned char *pixels);
-
+	const unsigned char *pixels, bool isFloat = false);
 
 struct Texture makeTextureF(unsigned square, const float *pixels);
+
 void freeTexture(Texture &);
 
-struct Framebuffer makeFramebuffer(unsigned width, unsigned height, unsigned nColors);
+struct Framebuffer makeFramebuffer(unsigned width, unsigned height, unsigned nColors, 
+						const bool *isfloat = nullptr, const int *channels = nullptr);
+
 void freeFramebuffer(Framebuffer &);
 
 
