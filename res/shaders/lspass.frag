@@ -14,7 +14,7 @@ layout(location = 4) uniform sampler2D positionMap;
 
 // Shadow Pass Data
 layout(location = 5) uniform sampler2D shadowMap;
-uniform float shadowBias = 0;
+uniform float shadowBias = 0.1f;
 
 // Light Data
 layout(location = 6) uniform vec4 lCol;

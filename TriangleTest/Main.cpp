@@ -9,11 +9,14 @@ void main()
 	context.init(1280, 720);
 
 	Geometry quad = makeGeometry(quad_verts, 4, quad_tris, 6);
-	Geometry spear = loadOBJ("../res/models/soulspear.obj");
+	Geometry spear = loadOBJ("../res/models/master_sword.obj");
+	//Geometry spear = loadOBJ("../res/models/soulspear.obj");
 	Geometry sphere = loadOBJ("../res/models/sphere.obj");
 
-	Texture spear_normal = loadTexture("../res/textures/soulspear_normal.tga");
-	Texture spear_diffuse = loadTexture("../res/textures/soulspear_diffuse.tga");
+	Texture spear_normal = loadTexture("../res/textures/mstemp.tga");
+	Texture spear_diffuse = loadTexture("../res/textures/msbump.tga");
+	//Texture spear_normal = loadTexture("../res/textures/soulspear_normal.tga");
+	//Texture spear_diffuse = loadTexture("../res/textures/soulspear_diffuse.tga");
 	Texture spear_specular = loadTexture("../res/textures/soulspear_specular.tga");
 
 	const unsigned char norm_pixels[4] = { 127, 127, 255, 255 };
@@ -25,9 +28,8 @@ void main()
 	Shader qdraw = loadShader("../res/shaders/quad.vert", "../res/shaders/quad.frag", false);
 	Shader gpass = loadShader("../res/shaders/gpass.vert", "../res/shaders/gpass.frag");
 
-	//////////////////////////////
-	//// Using Light pass shader designed for shadows.
-	//// Note that shadow pass can disable face-culling for some back-shadow improvements.
+	// Using Light pass shader designed for shadows.
+	// Note that shadow pass can disable face-culling for some back-shadow improvements.
 	Shader spass = loadShader("../res/shaders/spass.vert", "../res/shaders/spass.frag", true, false, false);
 	Shader lpass = loadShader("../res/shaders/lspass.vert", "../res/shaders/lspass.frag", false, true);
 
@@ -50,7 +52,7 @@ void main()
 	glm::mat4 camProj = glm::perspective(45.f, 1280.f / 720, 1.f, 100.f);
 
 	// Model Matrices
-	glm::mat4 spearModel; // ROTATES in main
+	glm::mat4 spearModel = glm::rotate(1.f, glm::vec3(50, 1, 0)) * glm::translate(glm::vec3(0, -12, -2));
 	glm::mat4 sphereModel = glm::translate(glm::vec3(0.3f, -1, -0.2f));
 	glm::mat4 wallModel = glm::rotate(45.f, glm::vec3(0, -1, 0)) * glm::translate(glm::vec3(0, 0, -2)) * glm::scale(glm::vec3(2, 2, 1));
 
@@ -69,7 +71,7 @@ void main()
 	while (context.step())
 	{
 		time += 0.016f;
-		spearModel = glm::rotate(time, glm::vec3(0, 1, 0)) * glm::translate(glm::vec3(0, -1, 0));
+		//spearModel = glm::rotate( time, glm::vec3(0, 0, 0)) * glm::translate(glm::vec3(0, -10, 0));
 		
 		// Geometry Pass
 
@@ -81,7 +83,7 @@ void main()
 		//tdraw(blur, quad, nframe, gframe.colors[1]);
 
 		
-		// Light pass!
+		// Light pass
 		clearFramebuffer(lframe);
 
 		
@@ -96,22 +98,21 @@ void main()
 		tdraw(lpass, quad, lframe, camView,
 			gframe.colors[0], gframe.colors[1], gframe.colors[2], gframe.colors[3],
 			sframe.depth, redColor, redView, lightProj);
+	
+		// Green light
 
-		
-		// Green light!
-
-		// Reuse the shadow pass!
+		// Reuse the shadow pass
 		clearFramebuffer(sframe);
 		tdraw(spass, spear, sframe, spearModel, greenView, lightProj);
 		tdraw(spass, sphere, sframe, sphereModel, greenView, lightProj);
 		tdraw(spass, quad, sframe, wallModel, greenView, lightProj);
-		// add the green light now.
+		// add the green light now
 		tdraw(lpass, quad, lframe, camView,
 			gframe.colors[0], gframe.colors[1], gframe.colors[2], gframe.colors[3],
 			sframe.depth, greenColor, greenView, lightProj);
 
-		// Debug Rendering Stuff. Just single textures to quads-
-		// drawing most of the images I've gathered so far.
+		// Debug Rendering Stuff. Just single textures to quads
+		// drawing most of the images I've gathered so far
 
 		// note that the sframe (shadow pass) will only be from the most recent light.
 		Texture debug_list[] = { gframe.colors[0], gframe.colors[1], gframe.colors[2], gframe.colors[3],
