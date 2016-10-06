@@ -112,6 +112,8 @@
   <ItemGroup>
     <None Include="gpass.frag" />
     <None Include="gpass.vert" />
+    <None Include="gpassSample.frag" />
+    <None Include="gpassSample.vert" />
     <None Include="lpass.frag" />
     <None Include="lpass.vert" />
     <None Include="lspass.frag" />

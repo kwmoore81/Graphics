@@ -57,5 +57,11 @@
     <None Include="lspass.vert">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="gpassSample.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="gpassSample.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

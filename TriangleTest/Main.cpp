@@ -9,9 +9,9 @@ void main()
 	context.init(1280, 720);
 
 	Geometry quad = makeGeometry(quad_verts, 4, quad_tris, 6);
-	Geometry spear = loadOBJ("../res/models/master_sword.obj");
+	Geometry mech1 = loadOBJ("../res/models/mech1.obj");
 	//Geometry spear = loadOBJ("../res/models/soulspear.obj");
-	Geometry sphere = loadOBJ("../res/models/sphere.obj");
+	//Geometry sphere = loadOBJ("../res/models/sphere.obj");
 
 	Texture spear_normal = loadTexture("../res/textures/mstemp.tga");
 	Texture spear_diffuse = loadTexture("../res/textures/msbump.tga");
@@ -48,11 +48,11 @@ void main()
 
 
 	// Camera information
-	glm::mat4 camView = glm::lookAt(glm::vec3(0, 0, 4), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	glm::mat4 camView = glm::lookAt(glm::vec3(0, -10, 15), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	glm::mat4 camProj = glm::perspective(45.f, 1280.f / 720, 1.f, 100.f);
 
 	// Model Matrices
-	glm::mat4 spearModel = glm::rotate(1.f, glm::vec3(50, 1, 0)) * glm::translate(glm::vec3(0, -12, -2));
+	glm::mat4 mechModel = glm::rotate(1.f, glm::vec3(0.6f, 0.5f, 0.0f)) * glm::translate(glm::vec3(0, -5, 4));
 	glm::mat4 sphereModel = glm::translate(glm::vec3(0.3f, -1, -0.2f));
 	glm::mat4 wallModel = glm::rotate(45.f, glm::vec3(0, -1, 0)) * glm::translate(glm::vec3(0, 0, -2)) * glm::scale(glm::vec3(2, 2, 1));
 
@@ -61,10 +61,10 @@ void main()
 	glm::mat4 lightProj = glm::ortho<float>(-10, 10, -10, 10, -10, 10);
 
 	glm::mat4   redView = glm::lookAt(glm::normalize(-glm::vec3(1, -1, -1)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-	glm::vec4   redColor = glm::vec4(1, 0, 0, 1);
+	glm::vec4   redColor = glm::vec4(128, 128, 128, 1);
 
 	glm::mat4 greenView = glm::lookAt(glm::normalize(-glm::vec3(1, 1, -1)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-	glm::vec4 greenColor = glm::vec4(0, 1, 0, 1);
+	glm::vec4 greenColor = glm::vec4(128, 128, 128, 1);
 
 	float time = 0;
 
@@ -72,39 +72,39 @@ void main()
 	{
 		time += 0.016f;
 		//spearModel = glm::rotate( time, glm::vec3(0, 0, 0)) * glm::translate(glm::vec3(0, -10, 0));
-		
+
 		// Geometry Pass
 
 		clearFramebuffer(gframe);
-		tdraw(gpass, spear, gframe, spearModel, camView, camProj, spear_diffuse, spear_normal, spear_specular);
-		tdraw(gpass, sphere, gframe, sphereModel, camView, camProj, white, vertex_normals, white);
-		tdraw(gpass, quad, gframe, wallModel, camView, camProj, white, vertex_normals, white);
+		tdraw(gpass, mech1, gframe, mechModel, camView, camProj, spear_diffuse, spear_normal, spear_specular);
+		//tdraw(gpass, sphere, gframe, sphereModel, camView, camProj, white, vertex_normals, white);
+		//tdraw(gpass, quad, gframe, wallModel, camView, camProj, white, vertex_normals, white);
 
 		//tdraw(blur, quad, nframe, gframe.colors[1]);
 
-		
+
 		// Light pass
 		clearFramebuffer(lframe);
 
-		
+
 		// RED LIGHT
 
 		// Shadow PrePass
 		clearFramebuffer(sframe);
-		tdraw(spass, spear, sframe, spearModel, redView, lightProj);
-		tdraw(spass, sphere, sframe, sphereModel, redView, lightProj);
+		tdraw(spass, mech1, sframe, mechModel, redView, lightProj);
+		//tdraw(spass, sphere, sframe, sphereModel, redView, lightProj);
 		tdraw(spass, quad, sframe, wallModel, redView, lightProj);
 		// Light Aggregation
 		tdraw(lpass, quad, lframe, camView,
 			gframe.colors[0], gframe.colors[1], gframe.colors[2], gframe.colors[3],
 			sframe.depth, redColor, redView, lightProj);
-	
+
 		// Green light
 
 		// Reuse the shadow pass
 		clearFramebuffer(sframe);
-		tdraw(spass, spear, sframe, spearModel, greenView, lightProj);
-		tdraw(spass, sphere, sframe, sphereModel, greenView, lightProj);
+		tdraw(spass, mech1, sframe, mechModel, greenView, lightProj);
+		//tdraw(spass, sphere, sframe, sphereModel, greenView, lightProj);
 		tdraw(spass, quad, sframe, wallModel, greenView, lightProj);
 		// add the green light now
 		tdraw(lpass, quad, lframe, camView,
