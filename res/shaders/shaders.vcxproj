@@ -110,10 +110,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="cell.frag" />
+    <None Include="cell.vert" />
     <None Include="gpass.frag" />
     <None Include="gpass.vert" />
     <None Include="gpassSample.frag" />
     <None Include="gpassSample.vert" />
+    <None Include="icyhell.shader" />
     <None Include="lpass.frag" />
     <None Include="lpass.vert" />
     <None Include="lspass.frag" />

@@ -5,6 +5,7 @@ layout(location = 3) in vec2 texcoord;
 
 out vec2 vUV;
 
+varying vec3 normal;
 
 void main()
 {

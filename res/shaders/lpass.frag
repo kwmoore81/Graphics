@@ -15,12 +15,15 @@ layout(location = 2) out vec4 outSpecular;
 
 in vec2 vUV;
 
+varying vec3 normal;
+
 layout(location = 7) uniform vec4 lDir;// = normalize(vec4(1,-1,-1,0));
 layout(location = 8) uniform vec4 lCol;// = vec4(1,1,1,1);
 
 
 void main()
 {
+	float intensity = dot(lDir,normalize(normal));
 	if(gl_FragCoord.z > texture(depthMap,vUV).r)
 		discard;
 
@@ -36,7 +39,18 @@ void main()
 	if(spec > 0)
 			spec = pow(spec, sP);
 
-	outAlbedo   = texture(albedoMap,   vUV) * lamb * lCol;
-	outSpecular = texture(specularMap, vUV) * spec * lCol;
-	outColor = outAlbedo + outSpecular;
+	//outAlbedo   = texture(albedoMap,   vUV) * lamb * lCol;
+	//outSpecular = texture(specularMap, vUV) * spec * lCol;
+	//outColor = outAlbedo + outSpecular;
+
+if (intensity > 0.95)
+		outcolor = vec4(1.0,0.5,0.5,1.0);
+	else if (intensity > 0.5)
+		outcolor = vec4(0.6,0.3,0.3,1.0);
+	else if (intensity > 0.25)
+		outcolor = vec4(0.4,0.2,0.2,1.0);
+	else
+		outcolor = vec4(0.2,0.1,0.1,1.0);
+	
+gl_FragColor = outColor;
 }

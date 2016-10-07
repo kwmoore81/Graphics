@@ -3,6 +3,18 @@
 #include "globjects.h"
 #include "Vertex.h"
 
+void shaderCheck(unsigned shader)
+{
+	GLint success;
+	GLchar infoLog[512];
+
+	glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+		glGetShaderInfoLog(shader, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::COMPILATION_FAILED" << infoLog << std::endl;
+	}
+}
 
 Geometry makeGeometry(const Vertex *verts, size_t vsize,
 	const unsigned int *tris, size_t tsize)
@@ -70,6 +82,9 @@ Shader makeShader(const char * vsource, const char * fsource,
 	// link the shaders into a single program
 	glAttachShader(retval.handle, vs);
 	glAttachShader(retval.handle, fs);
+
+	shaderCheck(vs);
+	shaderCheck(fs);
 
 	glog_glLinkProgram(retval.handle);
 	// no longer need these! Their functionality has been eaten by the program.
