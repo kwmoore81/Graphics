@@ -1,5 +1,5 @@
 #pragma once
-
+#include <glew\glew.h>
 
 struct Geometry makeGeometry(const struct Vertex *verts, size_t vsize,
 	const unsigned int  *tris, size_t tsize);
@@ -11,11 +11,11 @@ struct Shader makeShader(const char *vsource, const char *fsource,
 
 void freeShader(Shader &);
 
-
 struct Texture makeTexture(unsigned width, unsigned height, unsigned channels,
 	const unsigned char *pixels, bool isFloat = false);
 
-struct Texture makeTextureF(unsigned square, const float *pixels);
+struct CubeTexture makeCubeTexture(unsigned width, unsigned height, unsigned channels,
+									const void **pixels = nullptr, bool isfloat = false);
 
 void freeTexture(Texture &);
 

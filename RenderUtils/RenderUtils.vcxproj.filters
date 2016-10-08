@@ -24,9 +24,6 @@
     <ClCompile Include="Gallery.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="procgen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -63,9 +60,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="globjects.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="procgen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">

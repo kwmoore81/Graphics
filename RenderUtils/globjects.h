@@ -28,6 +28,13 @@ struct Texture
 
 };
 
+struct CubeTexture
+{
+	unsigned handle;
+	unsigned width, height, format;
+};
+
+
 struct Framebuffer
 {
 	unsigned handle;

@@ -3,6 +3,10 @@
 #include "globjects.h"
 #include "Vertex.h"
 
+
+enum {SKY_LEFT = 0, SKY_BACK, SKY_RIGHT, SKY_FRONT, SKY_TOP, SKY_BOTTOM};
+unsigned int skybox[6];
+
 void shaderCheck(unsigned shader)
 {
 	GLint success;
@@ -100,7 +104,6 @@ void freeShader(Shader &shader)
 	shader.handle = 0;
 }
 
-
 Texture makeTexture(unsigned width, unsigned height, unsigned channels, 
 											const unsigned char *pixels, bool isFloat)
 {
@@ -133,24 +136,38 @@ Texture makeTexture(unsigned width, unsigned height, unsigned channels,
 	return retval;
 }
 
-Texture makeTextureF(unsigned square, const float * pixels)
+CubeTexture makeCubeTexture(unsigned width, unsigned height, unsigned channels, const void **pixels, bool isFloat)
 {
-	glog("TODO", "DEPRECATE ME.");
+	CubeTexture retval = { 0, width, height, channels };
 
-	Texture retval = { 0, square, square, GL_RED }; // GL_RED, GL_RG, GL_RGB, GL_RGBA
+	GLenum eformat = GL_RGBA; // Number of channels goes.
+	GLenum iformat = isFloat ? GL_RGBA32F : eformat; // number of channels and the type.
+	switch (channels)
+	{
+	case 0: eformat = GL_DEPTH_COMPONENT; iformat = GL_DEPTH24_STENCIL8; break;
 
-	glGenTextures(1, &retval.handle);				// Declaration
-	glBindTexture(GL_TEXTURE_2D, retval.handle);    // Scoping
+	case 1: eformat = GL_RED;  iformat = isFloat ? GL_R32F : eformat; break;
+	case 2: eformat = GL_RG;   iformat = isFloat ? GL_RG32F : eformat; break;
+	case 3: eformat = GL_RGB;  iformat = isFloat ? GL_RGB32F : eformat; break;
+	case 4: eformat = GL_RGBA; iformat = isFloat ? GL_RGBA32F : eformat; break;
+	default: glog("ERROR", "Channels must be 0-4");
+	}
 
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_R32F, square, square, 0, GL_RED, GL_FLOAT, pixels);
+	glGenTextures(1, &retval.handle);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, retval.handle);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	for (unsigned i = 0; i < 6; ++i)
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, iformat, width, height, 0, eformat, isFloat ? GL_FLOAT : GL_UNSIGNED_BYTE, pixels[i]);
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
-	glBindTexture(GL_TEXTURE_2D, 0);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+
+	glBindTexture(GL_TEXTURE_CUBE_MAP, 0);
+
 	return retval;
 }
 

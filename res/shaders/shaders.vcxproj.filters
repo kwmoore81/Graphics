@@ -72,5 +72,11 @@
     <None Include="icyhell.shader">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="sky.frag">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="sky.vert">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

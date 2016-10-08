@@ -127,6 +127,8 @@
     <None Include="quad.vert" />
     <None Include="simple.frag" />
     <None Include="simple.vert" />
+    <None Include="sky.frag" />
+    <None Include="sky.vert" />
     <None Include="spass.frag" />
     <None Include="spass.vert" />
   </ItemGroup>

@@ -1,6 +1,5 @@
 
 #include "crenderutils.h"
-
 #include "GLM\ext.hpp"
 
 void main()
@@ -10,6 +9,7 @@ void main()
 
 	Geometry quad = makeGeometry(quad_verts, 4, quad_tris, 6);
 	Geometry mech1 = loadOBJ("../res/models/mech1.obj");
+	Geometry cube = loadOBJ("../res/models/cube.obj");
 	//Geometry spear = loadOBJ("../res/models/soulspear.obj");
 	//Geometry sphere = loadOBJ("../res/models/sphere.obj");
 
@@ -27,7 +27,7 @@ void main()
 
 	Shader qdraw = loadShader("../res/shaders/quad.vert", "../res/shaders/quad.frag", false);
 	Shader gpass = loadShader("../res/shaders/gpass.vert", "../res/shaders/gpass.frag");
-
+	Shader sky = loadShader("../res/shaders/sky.vert", "../res/shaders/sky.frag", false, false, false);
 	// Using Light pass shader designed for shadows.
 	// Note that shadow pass can disable face-culling for some back-shadow improvements.
 	Shader spass = loadShader("../res/shaders/spass.vert", "../res/shaders/spass.frag", true, false, false);
@@ -45,7 +45,9 @@ void main()
 	// Its RESOLUTION WILL GREATLY EFFECT THE QUALITY. Try playing around with high/low res.
 	Framebuffer sframe = makeFramebuffer(1024, 1024, 0);
 
-
+	CubeTexture cbmp = loadCubeMap("../res/textures/icyhell_rt.tga", "../res/textures/icyhell_lf.tga",
+		                           "../res/textures/icyhell_up.tga", "../res/textures/icyhell_dn.tga",
+		                           "../res/textures/icyhell_bk.tga", "../res/textures/icyhell_ft.tga");
 
 	// Camera information
 	glm::mat4 camView = glm::lookAt(glm::vec3(0, -10, 15), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
@@ -71,6 +73,10 @@ void main()
 	while (context.step())
 	{
 		time += 0.016f;
+		
+		glm::mat4 skyBox = camProj * glm::scale(glm::vec3(5, 5, 5)) * glm::rotate(time, glm::vec3(0, 1, 0));
+
+		tdraw(sky, cube, screen, skyBox, cbmp);
 		//spearModel = glm::rotate( time, glm::vec3(0, 0, 0)) * glm::translate(glm::vec3(0, -10, 0));
 
 		// Geometry Pass

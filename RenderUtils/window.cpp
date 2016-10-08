@@ -65,6 +65,6 @@ bool Window::term()
 	glfwDestroyWindow(winHandle);
 	glfwTerminate();
 	winHandle = nullptr;
-	isInitialized = true;
+	isInitialized = false;
 	return true;
 }
