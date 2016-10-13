@@ -132,6 +132,9 @@
     <None Include="spass.frag" />
     <None Include="spass.vert" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="OldMain.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

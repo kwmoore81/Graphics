@@ -3,6 +3,7 @@
 // Vertex Data
 in vec2 vUV;
 
+float visibility = 0;
 // Camera Data
 layout(location = 0) uniform mat4 view;
 
@@ -64,7 +65,11 @@ void main()
 			spec = pow(spec, sP);
 
 
-	outAlbedo   = texture(albedoMap,   vUV) * lamb * lCol;
-	outSpecular = texture(specularMap, vUV) * spec * lCol;
+	outAlbedo   = texture(albedoMap,   vUV) * lamb * lCol * visibility;
+	outSpecular = texture(specularMap, vUV) * spec * lCol * visibility;
 	outColor    =  outAlbedo + outSpecular;
+
+	outColor.a = 1;
+	outSpecular.a = 1;
+	outAlbedo.a = 1;
 }
