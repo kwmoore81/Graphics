@@ -51,7 +51,7 @@ void main()
 	// Note that shadow pass can disable face-culling for some back-shadow improvements.
 	Shader spass = loadShader("../res/shaders/spass.vert", "../res/shaders/spass.frag", true, false, false);
 	Shader lpass = loadShader("../res/shaders/lspass.vert", "../res/shaders/lspass.frag", false, true);
-	Shader cell = loadShader("../res/shaders/cell.vert", "../res/shaders/cell.frag");
+	//Shader cell = loadShader("../res/shaders/cell.vert", "../res/shaders/cell.frag");
 
 	Framebuffer screen = { 0, 1280, 720 };
 	//Framebuffer skyframe = { 0, 1280, 720 };
@@ -74,7 +74,7 @@ void main()
 	glm::mat4 camProj = glm::perspective(45.f, 1280.f / 720, 1.f, 100.f);
 
 	// Model Matrices
-	glm::mat4 mechModel;
+	glm::mat4 mechModel = glm::rotate(1.0f, glm::vec3(0.6f, 0.5f, 0.0f)) * glm::translate(glm::vec3(0, -5, 4));
 	glm::mat4 sphereModel = glm::translate(glm::vec3(-10.0f, 0.5f, 5.0f));
 
 	// Light Matrices and data
@@ -82,7 +82,7 @@ void main()
 	glm::mat4 lightProj = glm::ortho<float>(-10, 10, -10, 10, -10, 10);
 
 	glm::mat4   redView = glm::lookAt(glm::normalize(-glm::vec3(1, -1, -1)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-	glm::vec4   redColor = glm::vec4(1, 1, 1, 1);
+	glm::vec4   redColor = glm::vec4(0.184314, 0.309804, 0.309804, 1);
 
 	glm::mat4 greenView = glm::lookAt(glm::normalize(-glm::vec3(1, 1, -1)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	glm::vec4 greenColor = glm::vec4(0.55, 0.09, 0.09, 1);
@@ -98,7 +98,7 @@ void main()
 	{
 	
 		time += 0.001f;
-		mechModel = glm::rotate(time, glm::vec3(0.5f, 0.5f, 0.5f)) * glm::translate(glm::vec3(0, -5, 4));
+		
 		// Geometry Pass
 
 		clearFramebuffer(gframe);
@@ -129,7 +129,7 @@ void main()
 			gframe.colors[0], gframe.colors[1], gframe.colors[2], gframe.colors[3],
 			sframe.depth, greenColor, greenView, lightProj);*/
 
-		tdraw(lpass, quad, lframe, camView,
+		/*tdraw(lpass, quad, lframe, camView,
 			gframe.colors[0], gframe.colors[1], gframe.colors[2], gframe.colors[3],
 			sframe.depth, greenColor, greenView, lightProj);
 
@@ -143,7 +143,7 @@ void main()
 
 		tdraw(lpass, quad, lframe, camView,
 			gframe.colors[0], gframe.colors[1], gframe.colors[2], gframe.colors[3],
-			sframe.depth, yellowColor, yellowView, lightProj);
+			sframe.depth, yellowColor, yellowView, lightProj);*/
 
 		clearFramebuffer(skyframe);
 
