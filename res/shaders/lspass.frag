@@ -3,7 +3,7 @@
 // Vertex Data
 in vec2 vUV;
 
-//uniform float visibility = 0;
+uniform float visibility = 1;
 // Camera Data
 layout(location = 0) uniform mat4 view;
 
@@ -21,7 +21,7 @@ uniform float shadowBias = 0.1f;
 layout(location = 6) uniform vec4 lCol;
 layout(location = 7) uniform mat4 lightView; // lightDirection is the forward now!
 layout(location = 8) uniform mat4 lightProj;
-
+layout(location = 9) uniform sampler2D backgroundMap;
 // Framebuffer Outputs
 layout(location = 0) out vec4 outColor;
 layout(location = 1) out vec4 outAlbedo;
@@ -40,7 +40,7 @@ void main()
 	vec3 N = normalize(texture(normalMap, vUV).xyz);
 	vec4 P = texture(positionMap,vUV);
 
-	float ambientStrength = 0.1f;
+	//float ambientStrength = 0.1f;
 	
 	/////////////////////////////////////////////////////
 	/////// Shadow Map calculations
@@ -54,28 +54,27 @@ void main()
 	if(texture(shadowMap, sUV.xy).r < sUV.z - shadowBias)
 		discard;
 
-	/////////////////////////////////////////////////////
-	/////// Phong calculations
+//Lighting 
 
-	vec3 R = reflect(L, N);
+	vec3 R = reflect(L , N);
 	vec3 E = normalize(view[3].xyz + P.xyz);
 	float sP = 2;
 
 	float lamb = max(0,-dot(L, N));
-	float spec = max(0,-dot(E, R));
+	float spec = max(0,-dot(E , R * 1));
 	if(spec > 0)
 			spec = pow(spec, sP);
 
 
-	outAlbedo   = texture(albedoMap,   vUV) * lamb * lCol/* * visibility*/;
-	outSpecular = texture(specularMap, vUV) * spec * lCol/* * visibility*/;
-	outColor    =  outAlbedo + outSpecular;
+	outAlbedo   = texture(albedoMap,   vUV) * lamb * lCol * visibility;
+	outSpecular = texture(specularMap, vUV) * spec * lCol * visibility;
+	outColor    =  outAlbedo + outSpecular ;
 
 	//vec3 ambient = ambientStrength * texture(albedoMap, vUV);
 	//vec3 ambientResult = ambient * texture(specularMap, vUV);
 	//outColor = vec4(ambientResult, 1.0f);
 
 	//outColor.a = 1;
-	outSpecular.a = 1;
-	outAlbedo.a = 1;
+	//outSpecular.a = 1;
+	//outAlbedo.a = 1;
 }

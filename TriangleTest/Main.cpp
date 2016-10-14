@@ -1,10 +1,7 @@
 
 #include "crenderutils.h"
 #include "GLM\ext.hpp"
-#include "window.h"
-#include "Input.h"
-#include "GLM\glm.hpp"
-#include "Vertex.h"
+
 struct RenderComponent
 {
 
@@ -31,9 +28,7 @@ struct DirectionalLight
 void main()
 {
 	Window context;
-	Input input;
 	context.init(1280, 720);
-	input.init(context);
 
 	Geometry quad = makeGeometry(quad_verts, 4, quad_tris, 6);
 	Geometry mech1 = loadOBJ("../res/models/mech1.obj");
@@ -79,7 +74,7 @@ void main()
 	glm::mat4 camProj = glm::perspective(45.f, 1280.f / 720, 1.f, 100.f);
 
 	// Model Matrices
-	glm::mat4 mechModel = glm::rotate(1.f, glm::vec3(0.6f, 0.5f, 0.0f)) * glm::translate(glm::vec3(0, -5, 4));
+	glm::mat4 mechModel;
 	glm::mat4 sphereModel = glm::translate(glm::vec3(-10.0f, 0.5f, 5.0f));
 
 	// Light Matrices and data
@@ -87,10 +82,10 @@ void main()
 	glm::mat4 lightProj = glm::ortho<float>(-10, 10, -10, 10, -10, 10);
 
 	glm::mat4   redView = glm::lookAt(glm::normalize(-glm::vec3(1, -1, -1)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-	glm::vec4   redColor = glm::vec4(0.184314, 0.309804f, 0.309804, 1);
+	glm::vec4   redColor = glm::vec4(1, 1, 1, 1);
 
 	glm::mat4 greenView = glm::lookAt(glm::normalize(-glm::vec3(1, 1, -1)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-	glm::vec4 greenColor = glm::vec4(0.184314, 0.184314, 0.309804, 1);
+	glm::vec4 greenColor = glm::vec4(0.55, 0.09, 0.09, 1);
 
 	glm::mat4 blueView = glm::lookAt(glm::normalize(-glm::vec3(-1, -1, 1)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	glm::vec4 blueColor = glm::vec4(0.184314f, 0.309804f, 0.309804f, 1);
@@ -101,9 +96,9 @@ void main()
 
 	while (context.step())
 	{
-		clearFramebuffer(screen);
+	
 		time += 0.001f;
-		input.step();
+		mechModel = glm::rotate(time, glm::vec3(0.5f, 0.5f, 0.5f)) * glm::translate(glm::vec3(0, -5, 4));
 		// Geometry Pass
 
 		clearFramebuffer(gframe);
@@ -152,7 +147,7 @@ void main()
 
 		clearFramebuffer(skyframe);
 
-		glm::mat4 skyBox = camProj * glm::scale(glm::vec3(5, 5, 5)) * glm::rotate(time, glm::vec3(0, 1, 0));
+		glm::mat4 skyBox = camProj * glm::scale(glm::vec3(5, 5, 5)/*) * glm::rotate(time, glm::vec3(0, 1, 0)*/);
 		tdraw(sky, cube, skyframe, skyBox, cbmp);
 		
 		glm::mat4 mod = glm::translate(glm::vec3(0.0f, 0.0f, 0));
