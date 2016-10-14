@@ -3,7 +3,7 @@
 // Vertex Data
 in vec2 vUV;
 
-float visibility = 0;
+//uniform float visibility = 0;
 // Camera Data
 layout(location = 0) uniform mat4 view;
 
@@ -40,6 +40,8 @@ void main()
 	vec3 N = normalize(texture(normalMap, vUV).xyz);
 	vec4 P = texture(positionMap,vUV);
 
+	float ambientStrength = 0.1f;
+	
 	/////////////////////////////////////////////////////
 	/////// Shadow Map calculations
 
@@ -65,11 +67,15 @@ void main()
 			spec = pow(spec, sP);
 
 
-	outAlbedo   = texture(albedoMap,   vUV) * lamb * lCol * visibility;
-	outSpecular = texture(specularMap, vUV) * spec * lCol * visibility;
+	outAlbedo   = texture(albedoMap,   vUV) * lamb * lCol/* * visibility*/;
+	outSpecular = texture(specularMap, vUV) * spec * lCol/* * visibility*/;
 	outColor    =  outAlbedo + outSpecular;
 
-	outColor.a = 1;
+	//vec3 ambient = ambientStrength * texture(albedoMap, vUV);
+	//vec3 ambientResult = ambient * texture(specularMap, vUV);
+	//outColor = vec4(ambientResult, 1.0f);
+
+	//outColor.a = 1;
 	outSpecular.a = 1;
 	outAlbedo.a = 1;
 }

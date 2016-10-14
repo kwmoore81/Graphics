@@ -12,5 +12,7 @@ void main()
 {
 	outColor = texture(colorMap, vUV);
 
-	outColor += (1-outColor.a)*texture(backgroundMap,vUV);
+	outColor += (0.99f-outColor.a)*texture(backgroundMap,vUV);
+	
+
 }

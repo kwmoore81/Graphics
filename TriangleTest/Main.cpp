@@ -1,11 +1,39 @@
 
 #include "crenderutils.h"
 #include "GLM\ext.hpp"
+#include "window.h"
+#include "Input.h"
+#include "GLM\glm.hpp"
+#include "Vertex.h"
+struct RenderComponent
+{
+
+	glm::mat4 model;
+Geometry mesh;
+
+Texture norm, diff, spec;
+
+Shader  shader;
+Framebuffer fb;
+};
+
+struct DirectionalLight
+{
+	glm::vec3 dir, color;
+	float size;
+	glm::mat4 getMatrix()
+	{
+		return glm::ortho<float>(-size, size, -size, size, -size, size)
+			* glm::lookAt(-dir, glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	}
+};
 
 void main()
 {
 	Window context;
+	Input input;
 	context.init(1280, 720);
+	input.init(context);
 
 	Geometry quad = makeGeometry(quad_verts, 4, quad_tris, 6);
 	Geometry mech1 = loadOBJ("../res/models/mech1.obj");
@@ -28,7 +56,7 @@ void main()
 	// Note that shadow pass can disable face-culling for some back-shadow improvements.
 	Shader spass = loadShader("../res/shaders/spass.vert", "../res/shaders/spass.frag", true, false, false);
 	Shader lpass = loadShader("../res/shaders/lspass.vert", "../res/shaders/lspass.frag", false, true);
-	//Shader cell = loadShader("../res/shaders/cell.vert", "../res/shaders/cell.frag");
+	Shader cell = loadShader("../res/shaders/cell.vert", "../res/shaders/cell.frag");
 
 	Framebuffer screen = { 0, 1280, 720 };
 	//Framebuffer skyframe = { 0, 1280, 720 };
@@ -36,7 +64,7 @@ void main()
 	bool flTex[] = { false, true, false, true }; // colors don't need floats, but position/normal should use it.
 	Framebuffer gframe = makeFramebuffer(1280, 720, 4, flTex);
 	Framebuffer lframe = makeFramebuffer(1280, 720, 3);
-	Framebuffer skyframe = makeFramebuffer(0, 1280, 720);
+	Framebuffer skyframe = makeFramebuffer(1280, 720, 2);
 
 	// Temporary shadow framebuffer. Will be cleared and reused by each light!
 	// Its RESOLUTION WILL GREATLY EFFECT THE QUALITY. Try playing around with high/low res.
@@ -59,23 +87,29 @@ void main()
 	glm::mat4 lightProj = glm::ortho<float>(-10, 10, -10, 10, -10, 10);
 
 	glm::mat4   redView = glm::lookAt(glm::normalize(-glm::vec3(1, -1, -1)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-	glm::vec4   redColor = glm::vec4(1, 1, 1, 1);
+	glm::vec4   redColor = glm::vec4(0.184314, 0.309804f, 0.309804, 1);
 
 	glm::mat4 greenView = glm::lookAt(glm::normalize(-glm::vec3(1, 1, -1)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-	glm::vec4 greenColor = glm::vec4(0.137255f, 0.419608f, 0.556863f, 0);
+	glm::vec4 greenColor = glm::vec4(0.184314, 0.184314, 0.309804, 1);
 
+	glm::mat4 blueView = glm::lookAt(glm::normalize(-glm::vec3(-1, -1, 1)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	glm::vec4 blueColor = glm::vec4(0.184314f, 0.309804f, 0.309804f, 1);
+
+	glm::mat4 yellowView = glm::lookAt(glm::normalize(-glm::vec3(-1, 1, 1)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	glm::vec4 yellowColor = glm::vec4(0.184314f, 0.309804f, 0.309804f, 1);
 	float time = 0;
 
 	while (context.step())
 	{
+		clearFramebuffer(screen);
 		time += 0.001f;
-	
+		input.step();
 		// Geometry Pass
 
 		clearFramebuffer(gframe);
 		
 		tdraw(gpass, mech1, gframe, mechModel, camView, camProj, mech_diffuse, mech_normal, mech_specular);
-	
+		
 		// Light pass
 		clearFramebuffer(lframe);
 
@@ -83,27 +117,48 @@ void main()
 
 		// Shadow PrePass
 		clearFramebuffer(sframe);
-		tdraw(spass, mech1, sframe, mechModel, redView, lightProj);
+		/*tdraw(cell, mech1, sframe, mechModel, redView, lightProj);
+		tdraw(lpass, quad, lframe, camView,
+			gframe.colors[0], gframe.colors[1], gframe.colors[2], gframe.colors[3],
+			sframe.depth, redColor, redView, lightProj);*/
+
 		tdraw(lpass, quad, lframe, camView,
 			gframe.colors[0], gframe.colors[1], gframe.colors[2], gframe.colors[3],
 			sframe.depth, redColor, redView, lightProj);
-
 		// Green light
 
 		// Reuse the shadow pass
 		clearFramebuffer(sframe);
-		tdraw(spass, mech1, sframe, mechModel, greenView, lightProj);
+		/*tdraw(cell, mech1, sframe, mechModel, greenView, lightProj);
+		tdraw(lpass, quad, lframe, camView,
+			gframe.colors[0], gframe.colors[1], gframe.colors[2], gframe.colors[3],
+			sframe.depth, greenColor, greenView, lightProj);*/
+
 		tdraw(lpass, quad, lframe, camView,
 			gframe.colors[0], gframe.colors[1], gframe.colors[2], gframe.colors[3],
 			sframe.depth, greenColor, greenView, lightProj);
 
-		glm::mat4 skyBox = camProj * glm::scale(glm::vec3(5, 5, 5)/*) * glm::rotate(time, glm::vec3(0, 1, 0)*/);
+		clearFramebuffer(sframe);
+
+		tdraw(lpass, quad, lframe, camView,
+			gframe.colors[0], gframe.colors[1], gframe.colors[2], gframe.colors[3],
+			sframe.depth, blueColor, blueView, lightProj);
+
+		clearFramebuffer(sframe);
+
+		tdraw(lpass, quad, lframe, camView,
+			gframe.colors[0], gframe.colors[1], gframe.colors[2], gframe.colors[3],
+			sframe.depth, yellowColor, yellowView, lightProj);
+
+		clearFramebuffer(skyframe);
+
+		glm::mat4 skyBox = camProj * glm::scale(glm::vec3(5, 5, 5)) * glm::rotate(time, glm::vec3(0, 1, 0));
 		tdraw(sky, cube, skyframe, skyBox, cbmp);
 		
 		glm::mat4 mod = glm::translate(glm::vec3(0.0f, 0.0f, 0));
-		tdraw(qdraw, quad, screen, lframe.colors[0], mod);
+		tdraw(qdraw, quad, screen, lframe.colors[0], mod, skyframe.colors[0]);
 		
-		
+	
 	}
 
 	context.term();

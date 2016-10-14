@@ -29,7 +29,7 @@ void FlyCamera::update(const Input &in, const Time &t)
 	view = glm::translate(-position) * view;
 
 	glm::vec3 moveDir = glm::vec3(0, 0, 0);
-	if (in.getKeyState('W') == Input::DOWN) moveDir += glm::vec3(view[2]);
+	if (in.getKeyState('W') == Input::DOWN)	moveDir += glm::vec3(view[2]);
 	if (in.getKeyState('S') == Input::DOWN) moveDir -= glm::vec3(view[2]);
 	if (in.getKeyState('A') == Input::DOWN) moveDir += glm::vec3(view[0]);
 	if (in.getKeyState('D') == Input::DOWN) moveDir -= glm::vec3(view[0]);
