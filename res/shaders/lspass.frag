@@ -39,7 +39,8 @@ void main()
 	vec3 L = normalize((view * lightView[2]).xyz);
 	vec3 N = normalize(texture(normalMap, vUV).xyz);
 	vec4 P = texture(positionMap,vUV);
-
+	
+	//vec4 intensity = dot(lightView, normalize(texture(normalMap, vUV)));
 	float ambientStrength = 0.1;
 	vec4 ambient = ambientStrength * lCol;
 	
@@ -78,14 +79,19 @@ void main()
 	vec4 ambientResult = ambient * texture(albedoMap, vUV);
 	vec4 outAmbient = ambientResult;
 
-	outColor  =  outAlbedo + outSpecular + outAmbient;
+	vec4 baseOutColor = outAlbedo + outSpecular + outAmbient;
+
+if (lamb > 0.95)
+		outColor =  baseOutColor + vec4(1.0,0.5,0.5,1.0);
+	else if (lamb > 0.5)
+		outColor = baseOutColor + vec4(0.6,0.3,0.3,1.0);
+	else if (lamb > 0.25)
+		outColor = baseOutColor + vec4(0.4,0.2,0.2,1.0);
+	else
+		outColor = baseOutColor + vec4(0.2,0.1,0.1,1.0);
 	
 	outColor.a = alp;
-	//vec3 ambient = ambientStrength * texture(albedoMap, vUV);
-	//vec3 ambientResult = ambient * texture(specularMap, vUV);
-	//outColor = vec4(ambientResult, 1.0f);
+	
 
-	//outColor.a = 1;
-	//outSpecular.a = 1;
-	//outAlbedo.a = 1;
+	
 }
