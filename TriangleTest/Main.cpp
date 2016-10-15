@@ -81,7 +81,7 @@ void main()
 	// They can all use the same projection matrix...
 	glm::mat4 lightProj = glm::ortho<float>(-10, 10, -10, 10, -10, 10);
 
-	glm::mat4   redView = glm::lookAt(glm::normalize(-glm::vec3(1, -1, -1)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+	glm::mat4   redView = glm::lookAt(glm::normalize(-glm::vec3(1, -1, 1)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 	glm::vec4   redColor = glm::vec4(0.184314, 0.309804, 0.309804, 1);
 
 	glm::mat4 greenView = glm::lookAt(glm::normalize(-glm::vec3(1, 1, -1)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));

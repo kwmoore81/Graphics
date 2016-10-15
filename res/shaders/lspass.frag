@@ -69,7 +69,7 @@ void main()
 	float sP = 2;
 
 	float lamb = max(0,-dot(L, N));
-	float spec = max(0,-dot(E , R * 1));
+	float spec = max(0,-dot(E , R * 5));
 	if(spec > 0)
 			spec = pow(spec, sP);
 
